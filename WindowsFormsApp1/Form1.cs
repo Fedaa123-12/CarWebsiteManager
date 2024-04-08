@@ -17,80 +17,74 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+      
         public Form1()
         {
             InitializeComponent();
         }
-
-
-
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    string url = "https://car-website-2.onrender.com";
-                    HttpResponseMessage response = await client.GetAsync(url);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        //dynamic stuff = JObject.Parse(responseBody);
-                        JArray jsonArray = JArray.Parse(responseBody);
-
-
-                        foreach (JObject item in jsonArray.Cast<JObject>())
-                        {
-                            // Access values by key
-                            string name = (string)item["Name"];
-                            string model = (string)item["Model"];
-
-
-                            dataGridView1.Rows.Add(name, model);
-
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}");
-                }
-            }
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("eweew");
 
-            Console.WriteLine("Console window created!"); // Test output
-            /*string connetionString = null;
-            MySqlConnection cnn;
-            connetionString = "server=sql8.freesqldatabase.com;database=sql8695053;uid=sql8695053;pwd=\"CiE24Lf8kJ\";";
-            cnn = new MySqlConnection(connetionString);
-            try
-            {
-                cnn.Open();
-                MessageBox.Show("Connection Open ! ");
-                cnn.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Can not open connection ! ");
-            }*/
         }
 
-        private void button2_Click(object sender, EventArgs e)
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+           
+            // Check if any row is selected
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                int i = dataGridView1.SelectedRows.Count;
+                DialogResult result = MessageBox.Show("Are you sure you want to delete the selected "+ i + " rows?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    for (i = dataGridView1.SelectedRows.Count - 1; i >= 0; i--)
+                    {
+                        // Get the index of the selected row
+                        int selectedIndex = dataGridView1.SelectedRows[i].Index;
+
+                        
+                        string nameToDelete = dataGridView1.Rows[selectedIndex].Cells["name"].Value.ToString();
+                        MessageBox.Show($"Deleting car with Name: {nameToDelete}");
+
+                        // Remove the selected row from the DataGridView
+                        dataGridView1.Rows.RemoveAt(selectedIndex);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a row to delete.");
+            }
+        
+
+        }
+
+
+        private void CREATE_Click(object sender, EventArgs e)
         {
             Create creat = new Create();
             creat.Show();
         }
 
-      
+        private void READ_Click(object sender, EventArgs e)
+        {
+            Read read = new Read();
+            read.Show();
+        }
+
+        private void UPDATE_Click(object sender, EventArgs e)
+        {
+            Update update = new Update();   
+            update.Show();
+        }
+
+        private void DELETE_Click(object sender, EventArgs e)
+        {
+            Delete delete= new Delete();    
+            delete.Show();
+        }
     }
 }
