@@ -31,7 +31,6 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-           
             // Check if any row is selected
             if (dataGridView1.SelectedRows.Count > 0)
             {
